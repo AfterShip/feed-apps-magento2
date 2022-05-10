@@ -7,8 +7,8 @@
 
         <section id="tiktok_shopping_feed_connect" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Connect</label>
-            <tab>aftership</tab>
-            <resource>AfterShip_Automizely_Feed::tiktok_shopping_feed_connect</resource>
+            <tab>tiktok_shopping_feed</tab>
+            <resource>AfterShip_Feed::tiktok_shopping_feed_connect</resource>
             <group id="connect_link" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
 		    <label>Connect with TikTok Shopping Feed</label>
 		    <comment><![CDATA[<a target="_blank" href="https://organization.automizely.com/apps/aftership/magento-2"><img src="https://assets.aftership.com/apps/images/connect_magento2_with_aftership.png" alt="Connect with TikTok Shopping Feed"></a><style type="text/css">table.form-list{display: none}</style>]]></comment>
