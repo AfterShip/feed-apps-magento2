@@ -1,7 +1,0 @@
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
-    <router id="admin">
-        <route id="aftership_automizely_feed" frontName="aftership_automizely_feed">
-            <module name="AfterShip_Automizely_Feed" />
-        </route>
-    </router>
-</config>
