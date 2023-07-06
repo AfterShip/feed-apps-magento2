@@ -2,7 +2,7 @@
     "name": "aftership/feed-apps-magento2",
     "description": "Automizely Feed extension for Magento 2. Allows connect with TikTok Shopping Feed and more. ",
     "type": "magento2-module",
-    "version": "1.0.2",
+    "version": "1.0.5",
     "minimum-stability": "stable",
     "license": "MIT",
     "keywords": ["aftership", "magento", "magento2", "magento-2", "tiktok", "shopping", "feed"],
@@ -17,7 +17,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "AfterShip\\Automizely\\Feed\\": ""
+            "AfterShip\\Feed\\": ""
         }
     },
     "config": {
