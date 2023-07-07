@@ -6,6 +6,8 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\GroupedProduct\Model\Product\Type\Grouped;
+use Magento\Bundle\Model\Product\Type as Bundle;
 use AfterShip\Feed\Helper\WebhookHelper;
 use Psr\Log\LoggerInterface;
 
@@ -15,6 +17,10 @@ class ProductSaveObserver implements ObserverInterface
 	private $productRepository;
 	/** @var Configurable  */
 	private $configurable;
+	/** @var Grouped  */
+	private $grouped;
+	/** @var Bundle  */
+	private $bundle;
 	/** @var WebhookHelper  */
 	private $webhookHelper;
 	/** @var LoggerInterface  */
@@ -23,13 +29,28 @@ class ProductSaveObserver implements ObserverInterface
 	public function __construct(
 		ProductRepositoryInterface $productRepository,
 		Configurable $configurable,
+		Grouped $grouped,
+		Bundle $bundle,
 		WebhookHelper $webhookHelper,
 		LoggerInterface $logger
 	) {
 		$this->productRepository = $productRepository;
 		$this->configurable = $configurable;
+		$this->grouped = $grouped;
+		$this->bundle = $bundle;
 		$this->logger = $logger;
 		$this->webhookHelper = $webhookHelper;
+	}
+
+	/**
+	 * @param string $productId
+	 * @return array
+	 */
+	public function getParentProductIds ($productId) {
+		$configurableParentIds = $this->configurable->getParentIdsByChild($productId);
+		$groupedParentIds = $this->grouped->getParentIdsByChild($productId);
+		$bundleParentIds = $this->bundle->getParentIdsByChild($productId);
+		return array_merge($configurableParentIds, $groupedParentIds, $bundleParentIds);
 	}
 
 	/**
@@ -42,7 +63,7 @@ class ProductSaveObserver implements ObserverInterface
 			/* @var \Magento\Catalog\Model\Product $product */
 			$product = $observer->getEvent()->getProduct();
 			$productId = $product->getId();
-			$parentIds = $this->configurable->getParentIdsByChild($productId);
+			$parentIds = $this->getParentProductIds($productId);
 			$topic = (count($parentIds) === 0) ? "products/update" : "variants/update";
 			// Send webhook.
 			$this->webhookHelper->makeWebhookRequest($topic, [
@@ -53,13 +74,11 @@ class ProductSaveObserver implements ObserverInterface
 			// Fix updated time for parent product.
 			foreach ($parentIds as $parentId) {
 				$parentProduct = $this->productRepository->getById($parentId);
-				$updatedAt = $parentProduct->getUpdatedAt();
-				$timeDifference = time() - ($updatedAt ? strtotime($updatedAt) : 0);
 				$parentProduct->setData('updated_at', date('Y-m-d H:i:s'));
 				$this->productRepository->save($parentProduct);
 			}
 		} catch (\Exception $e) {
-			$this->logger->error(sprintf('[AfterShip Feed] Faield to update product data, %s', $e->getMessage()));
+			$this->logger->error(sprintf('[AfterShip Feed] Faield to update product data on ProductSaveObserver, %s', $e->getMessage()));
 		}
 	}
 }

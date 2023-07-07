@@ -2,4 +2,7 @@
     <event name="catalog_product_save_after">
         <observer name="ProductSaveObserver" instance="AfterShip\Feed\Observer\ProductSaveObserver" />
     </event>
+    <event name="cataloginventory_stock_item_save_after">
+        <observer name="InventoryUpdateObserver" instance="AfterShip\Feed\Observer\InventoryUpdateObserver" />
+    </event>
 </config>
