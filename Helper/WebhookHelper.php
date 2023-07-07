@@ -70,8 +70,8 @@ class WebhookHelper
 				'Content-Type: application/json',
 				'X-Magento-Hmac-Sha256: ' . $this->createWebhookSecurity($webhook->integration_id, $data),
 				'Content-Length: ' . strlen(json_encode($data)),
-				'X-Magento-Topic: ' . $webhook->topic,
-				'X-Magento-App-Key: ' . $webhook->app_key
+				'X-Webhook-Topic: ' . $webhook->topic,
+				'X-App-Key: ' . $webhook->app_key
 			),
 		]);
 		$response = curl_exec($curl);
