@@ -62,13 +62,8 @@ class InventoryUpdateObserver implements ObserverInterface
 	 */
 	private function isRestfulApiRequest()
 	{
-		try {
-			$integrationId = $this->userContext->getUserId();
-			$integration = $this->integrationService->get($integrationId);
-		} catch (\Exception $e) {
-			return false;
-		}
-		return true;
+		$userType = $this->userContext->getUserType();
+		return ($userType === UserContextInterface::USER_TYPE_INTEGRATION);
 	}
 
 	public function execute(Observer $observer)
