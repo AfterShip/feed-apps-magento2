@@ -12,30 +12,29 @@ use Magento\Bundle\Model\Product\Type as Bundle;
 use AfterShip\Feed\Helper\WebhookHelper;
 use Psr\Log\LoggerInterface;
 
-class ProductSaveObserver implements ObserverInterface
+class ProductDeleteObserver implements ObserverInterface
 {
-	/** @var ProductRepositoryInterface */
+	/** @var ProductRepositoryInterface  */
 	private $productRepository;
-	/** @var Configurable */
+	/** @var Configurable  */
 	private $configurable;
-	/** @var Grouped */
+	/** @var Grouped  */
 	private $grouped;
-	/** @var Bundle */
+	/** @var Bundle  */
 	private $bundle;
-	/** @var WebhookHelper */
+	/** @var WebhookHelper  */
 	private $webhookHelper;
-	/** @var LoggerInterface */
+	/** @var LoggerInterface  */
 	private $logger;
 
 	public function __construct(
 		ProductRepositoryInterface $productRepository,
-		Configurable               $configurable,
-		Grouped                    $grouped,
-		Bundle                     $bundle,
-		WebhookHelper              $webhookHelper,
-		LoggerInterface            $logger
-	)
-	{
+		Configurable $configurable,
+		Grouped $grouped,
+		Bundle $bundle,
+		WebhookHelper $webhookHelper,
+		LoggerInterface $logger
+	) {
 		$this->productRepository = $productRepository;
 		$this->configurable = $configurable;
 		$this->grouped = $grouped;
@@ -48,8 +47,7 @@ class ProductSaveObserver implements ObserverInterface
 	 * @param string $productId
 	 * @return array
 	 */
-	public function getParentProductIds($productId)
-	{
+	public function getParentProductIds ($productId) {
 		$configurableParentIds = $this->configurable->getParentIdsByChild($productId);
 		$groupedParentIds = $this->grouped->getParentIdsByChild($productId);
 		$bundleParentIds = $this->bundle->getParentIdsByChild($productId);
@@ -67,13 +65,13 @@ class ProductSaveObserver implements ObserverInterface
 			$product = $observer->getEvent()->getProduct();
 			$productId = $product->getId();
 			$parentIds = $this->getParentProductIds($productId);
-			$topic = (count($parentIds) === 0) ? Constants::WEBHOOK_TOPIC_PRODUCTS_UPDATE : Constants::WEBHOOK_TOPIC_VARIANTS_UPDATE;
+			$topic = (count($parentIds) === 0) ? Constants::WEBHOOK_TOPIC_PRODUCTS_DELETE : Constants::WEBHOOK_TOPIC_VARIANTS_DELETE;
 			// Send webhook.
 			$this->webhookHelper->makeWebhookRequest($topic, [
 				"id" => $productId,
 				"type_id" => $product->getTypeId(),
 				"sku" => $product->getSku(),
-				"visibility" => (string)$product->getVisibility(),
+				"visibility"=>(string)$product->getVisibility(),
 			]);
 			// Fix updated time for parent product.
 			foreach ($parentIds as $parentId) {

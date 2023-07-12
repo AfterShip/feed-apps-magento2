@@ -8,4 +8,7 @@
     <event name="sales_order_save_after">
         <observer name="SalesOrderUpdateObserver" instance="AfterShip\Feed\Observer\SalesOrderUpdateObserver" />
     </event>
+    <event name="catalog_product_delete_after">
+        <observer name="ProductDeleteObserver" instance="AfterShip\Feed\Observer\ProductDeleteObserver" />
+    </event>
 </config>
