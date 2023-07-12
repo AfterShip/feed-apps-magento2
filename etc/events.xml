@@ -5,4 +5,7 @@
     <event name="cataloginventory_stock_item_save_after">
         <observer name="InventoryUpdateObserver" instance="AfterShip\Feed\Observer\InventoryUpdateObserver" />
     </event>
+    <event name="sales_order_save_after">
+        <observer name="SalesOrderUpdateObserver" instance="AfterShip\Feed\Observer\SalesOrderUpdateObserver" />
+    </event>
 </config>

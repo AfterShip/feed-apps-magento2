@@ -2,6 +2,7 @@
 
 namespace AfterShip\Feed\Observer;
 
+use AfterShip\Feed\Constants;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -64,7 +65,7 @@ class ProductSaveObserver implements ObserverInterface
 			$product = $observer->getEvent()->getProduct();
 			$productId = $product->getId();
 			$parentIds = $this->getParentProductIds($productId);
-			$topic = (count($parentIds) === 0) ? "products/update" : "variants/update";
+			$topic = (count($parentIds) === 0) ? Constants::WEBHOOK_TOPIC_PRODUCTS_UPDATE : Constants::WEBHOOK_TOPIC_VARIANTS_UPDATE;
 			// Send webhook.
 			$this->webhookHelper->makeWebhookRequest($topic, [
 				"id" => $productId,
