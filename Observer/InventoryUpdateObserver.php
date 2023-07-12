@@ -2,6 +2,7 @@
 
 namespace AfterShip\Feed\Observer;
 
+use AfterShip\Feed\Constants;
 use AfterShip\Feed\Helper\WebhookHelper;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\GroupedProduct\Model\Product\Type\Grouped;
@@ -75,7 +76,7 @@ class InventoryUpdateObserver implements ObserverInterface
 				$parentIds = $this->getParentProductIds($productId);
 				foreach ($parentIds as $parentId) {
 					$parentProduct = $this->productRepository->getById($parentId);
-					$this->webhookHelper->makeWebhookRequest('products/update', [
+					$this->webhookHelper->makeWebhookRequest(Constants::WEBHOOK_TOPIC_PRODUCTS_UPDATE, [
 						"id" => $parentId,
 						"type_id" => $parentProduct->getTypeId(),
 						"sku" => $parentProduct->getSku(),
