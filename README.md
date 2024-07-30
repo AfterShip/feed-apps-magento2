@@ -1,4 +1,4 @@
-# Automizely Feed extension for Magento 2
+# 【已经废弃，请移步至：https://github.com/AfterShip/tiktok-shop] Automizely Feed extension for Magento 2
 
 Automizely Feed extension for Magento 2. Allows connect with TikTok Shopping Feed and more.
 
